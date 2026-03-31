@@ -68,7 +68,11 @@ describe('Verifier', () => {
     });
 
     it('should pass audit when all criteria met', () => {
-      const project = engine.createProject('Test', 'Objective', 'Criteria 1');
+      const project = engine.createProject(
+        'Test Project',
+        'Build a comprehensive user authentication system with OAuth2 support',
+        'Users can login with email and password\nOAuth2 integration works\nSession management is secure'
+      );
       const task = engine.createTask(project.id, 'Task 1', 'Details', 100);
       engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
@@ -98,7 +102,11 @@ describe('Verifier', () => {
 
   describe('whyNotDone', () => {
     it('should return empty array when project complete', () => {
-      const project = engine.createProject('Test', 'Objective', 'Criteria');
+      const project = engine.createProject(
+        'Complete Project',
+        'Develop a fully functional REST API with comprehensive test coverage and documentation',
+        'All endpoints return correct responses\nAPI documentation is complete\n95% test coverage achieved'
+      );
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
       engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
@@ -131,7 +139,11 @@ describe('Verifier', () => {
     });
 
     it('should return true when audit passes', () => {
-      const project = engine.createProject('Test', 'Objective', 'Criteria');
+      const project = engine.createProject(
+        'Performance Project',
+        'Optimize application performance to handle 1000 concurrent users with sub-200ms response times',
+        'Response time under 200ms for all endpoints\nSupports 1000+ concurrent users\nNo memory leaks detected'
+      );
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
       engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');

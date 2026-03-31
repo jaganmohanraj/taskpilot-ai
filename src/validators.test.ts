@@ -165,7 +165,7 @@ describe('validators', () => {
     });
 
     it('should provide suggestions when score is low', () => {
-      const result = validateEvidence('Title', 'Some basic description');
+      const result = validateEvidence('Title', 'Basic info here');
 
       expect(result.suggestions.length).toBeGreaterThan(0);
     });
@@ -208,7 +208,7 @@ describe('validators', () => {
       const result = parseAcceptanceCriteria('   \n  \n  ');
 
       expect(result.valid).toBe(false);
-      expect(result.issues).toContain('Acceptance criteria is empty');
+      expect(result.issues).toContain('No acceptance criteria provided');
     });
 
     it('should filter out empty lines', () => {

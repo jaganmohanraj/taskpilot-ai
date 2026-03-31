@@ -172,7 +172,7 @@ describe('CompositeOperations', () => {
     it('should clone memory when includeMemory is true', () => {
       const original = engine.createProject('Original', 'Build feature', 'Criteria');
       engine.logMemory(original.id, 'decision', 'Using TypeScript');
-      engine.logMemory(original.id, 'insight', 'Performance optimization needed');
+      engine.logMemory(original.id, 'note', 'Performance optimization needed');
 
       const options: CloneOptions = { includeMemory: true };
       const cloned = composite.cloneProject(original.id, options);
@@ -183,14 +183,14 @@ describe('CompositeOperations', () => {
 
     it('should not clone resolved blockers', () => {
       const original = engine.createProject('Original', 'Build feature', 'Criteria');
-      const blocker = engine.logMemory(original.id, 'blocker', 'API down');
-      engine.resolveMemory(blocker.id);
+      const blockerId = engine.logMemory(original.id, 'blocker', 'API down');
+      engine.resolveMemory(blockerId);
 
       const options: CloneOptions = { includeMemory: true };
       const cloned = composite.cloneProject(original.id, options);
 
       const clonedMemory = engine.listMemory(cloned.id);
-      const hasResolvedBlocker = clonedMemory.some(m => m.kind === 'blocker' && m.is_resolved);
+      const hasResolvedBlocker = clonedMemory.some(m => m.kind === 'blocker' && m.isResolved);
       expect(hasResolvedBlocker).toBe(false);
     });
 
