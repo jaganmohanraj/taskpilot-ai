@@ -19,6 +19,9 @@ Most AI assistants:
 TaskPilot AI provides:
 
 ✅ **Verifier-Gated Completion** - Projects cannot be marked done until all criteria pass
+✅ **External Verification** - Run actual tests, builds, lints to prove completion
+✅ **Real-Time Updates** - WebSocket-powered live dashboard with instant notifications
+✅ **Composite Operations** - Batch tasks, bulk updates, project cloning, templates
 ✅ **Anti-Drift Detection** - Continuous monitoring prevents scope creep and goal misalignment
 ✅ **Persistent Memory** - Full audit trail of decisions, blockers, assumptions, and evidence
 ✅ **State Machine** - Enforced project lifecycle from draft → verified → done
@@ -38,10 +41,36 @@ Projects cannot close until:
 - Evidence is logged **and validated for quality**
 - Acceptance criteria are met
 - Drift checks pass
+- **External verification passes** (tests, builds, lints)
 
-**Enforcement**: Direct attempts to mark projects "done" are blocked at the architecture level. The verifier must pass with 100/100 score.
+**Enforcement**: Direct attempts to mark projects "done" are blocked at the architecture level. The verifier must pass with 100/100 score, including optional external verification.
 
-### 2. Anti-Drift System
+### 2. External Verification 🔬
+Prove completion with actual execution:
+- **Test Execution**: Run npm test, pytest, etc.
+- **Build Verification**: Ensure code compiles
+- **Lint Checks**: Code quality validation
+- **Git Verification**: Commits and clean working tree
+- **Custom Checks**: Configurable commands
+- **Automatic Evidence**: Results logged as proof
+
+### 3. Real-Time Collaboration 🔄
+- **WebSocket Updates**: Live project/task changes
+- **Live Notifications**: Toast alerts for events
+- **Auto-Refresh**: Dashboard updates without reload
+- **Multi-User Ready**: Subscribe to project channels
+- **Event Streaming**: All changes broadcast instantly
+
+### 4. Composite Operations ⚡
+Efficient batch and bulk operations:
+- **Batch Task Creation**: Create multiple tasks at once
+- **Bulk Status Updates**: Update many tasks together
+- **Project Cloning**: Duplicate entire projects
+- **Project Templates**: Reusable project patterns
+- **Bulk Archiving**: Archive completed projects
+- **Aggregated Stats**: Cross-project insights
+
+### 5. Anti-Drift System
 Automatic detection of:
 - Scope drift (too many tasks)
 - Goal mismatch (vague objectives)
@@ -49,7 +78,7 @@ Automatic detection of:
 - Abandoned tasks
 - Unresolved blockers
 
-### 3. Full Memory Persistence 💾
+### 6. Full Memory Persistence 💾
 Every project stores:
 - **Decisions** - What was decided and why
 - **Assumptions** - What we're assuming (and whether verified)
@@ -59,7 +88,7 @@ Every project stores:
 
 **Evidence Validation**: All evidence is scored for quality. Suspicious patterns like "done" or "ok" trigger warnings.
 
-### 4. Execution Intelligence 🧠
+### 7. Execution Intelligence 🧠
 - Smart work breakdown from acceptance criteria
 - Priority and dependency awareness
 - Next-best-action recommendations
@@ -97,11 +126,15 @@ npm run dashboard
 Then open http://localhost:3000 in your browser.
 
 The dashboard provides:
+- **Real-Time Updates**: WebSocket-powered live updates without refresh
 - **Overview**: View all projects with health scores and progress
 - **Project Detail**: Deep-dive into tasks, memory, evidence, audit results, and timeline
 - **Next Action**: AI-powered recommendations for what to work on next
 - **Real-time Health**: Visual health meters and completeness tracking
 - **Create Projects**: Interactive forms to create new projects
+- **Live Notifications**: Toast notifications for verification results and updates
+- **Batch Operations**: Create multiple tasks, clone projects, bulk updates
+- **External Verification**: Run tests/builds directly from UI
 
 ### Use with Claude Desktop
 
