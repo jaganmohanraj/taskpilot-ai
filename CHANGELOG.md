@@ -1,0 +1,83 @@
+# Changelog
+
+All notable changes to TaskPilot AI will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.3.0] - 2026-03-31
+
+### Added
+- **Anti-Drift Detection System**: Comprehensive drift detection with 5 check types
+  - Scope drift (task count monitoring)
+  - Goal mismatch (objective validation)
+  - Incomplete criteria detection
+  - Abandoned task identification
+  - Unresolved blocker tracking
+- **Enhanced State Machine**: Full lifecycle with 8 project states (draft → done → archived)
+- **State History Tracking**: Complete audit trail of all project and task state changes
+- **Intelligent Work Breakdown Generator**: Context-aware task generation from acceptance criteria
+- **Task Dependency Management**: Tasks can depend on other tasks with automatic validation
+- **Enhanced Verifier**: Multi-factor completion audit with drift integration
+- **Health Scoring System**: Real-time project health and completeness metrics
+- **Audit Trail Persistence**: All audit executions saved with timestamps
+- **Enhanced Database Schema**:
+  - Added `state_history` table
+  - Added `audit_trail` table
+  - Added `drift_checks` table
+  - Added `project_metrics` table
+  - Added health_score, completeness_score, drift_score to projects
+  - Added depends_on, completed_at to tasks
+  - Added resolved_at to memory_entries
+  - Created indexes for performance
+- **26 MCP Tools**: Comprehensive tool coverage for all operations
+- **3 MCP Prompts**: start_project, closeout_review, check_project_health
+- **New MCP Tools**:
+  - `get_project` - Retrieve single project
+  - `list_memory` - View all memory entries
+  - `list_evidence` - View all evidence
+  - `get_audit_history` - View audit history
+  - `why_not_done` - Get blockers to completion
+  - `run_drift_detection` - Execute drift checks
+  - `get_drift_checks` - View drift issues
+  - `resolve_drift_check` - Mark drift resolved
+  - `get_project_timeline` - View state history
+- **Enhanced Documentation**:
+  - Complete rewrite of README with commercial positioning
+  - New architecture.md with detailed system design
+  - Updated all existing docs
+
+### Changed
+- Project default status changed from 'planned' to 'draft'
+- Work breakdown now context-aware based on acceptance criteria
+- Completion audit now includes drift detection
+- `suggestNextBestAction` returns structured NextAction object
+- Tool parameters now include descriptions for better AI discovery
+- MCP server version bumped to 0.3.0
+
+### Improved
+- Database schema with proper indexes for performance
+- Type safety with expanded TypeScript interfaces
+- Error handling and validation
+- Code organization into focused modules
+
+## [0.2.0] - 2026-03-31
+
+### Added
+- Initial MCP server implementation
+- Basic project and task management
+- Memory and evidence logging
+- Basic completion audit
+- SQLite persistence
+- Core documentation
+
+### Features
+- 10 MCP tools
+- 2 MCP prompts
+- 2 MCP resources
+- State machine (basic)
+- Verifier-gated completion (basic)
+
+## [0.1.0] - Initial Concept
+
+- Project conception and initial planning
