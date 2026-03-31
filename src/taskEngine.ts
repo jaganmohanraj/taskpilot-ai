@@ -5,6 +5,12 @@ import { Verifier } from './verifier.js';
 import { DriftDetector } from './driftDetector.js';
 import { StateTracker } from './stateTracker.js';
 import { WorkBreakdownGenerator } from './workBreakdownGenerator.js';
+import {
+  validateEvidence,
+  parseAcceptanceCriteria,
+  validateProjectTransition,
+  validateTaskTransition,
+} from './validators.js';
 
 function now(): string {
   return new Date().toISOString();
@@ -85,6 +91,13 @@ export class TaskEngine {
     if (!task) throw new Error('Task not found');
 
     const oldStatus = task.status;
+
+    // Validate state transition
+    const transitionValidation = validateTaskTransition(oldStatus, status);
+    if (!transitionValidation.valid) {
+      throw new Error(`Invalid task state transition: ${transitionValidation.reason}`);
+    }
+
     const completedAt = status === 'done' ? now() : null;
 
     db.prepare(`UPDATE tasks SET status = ?, updated_at = ?, completed_at = ? WHERE id = ?`).run(status, now(), completedAt, taskId);
@@ -101,6 +114,23 @@ export class TaskEngine {
     if (!project) throw new Error('Project not found');
 
     const oldStatus = project.status;
+
+    // Validate state transition
+    const transitionValidation = validateProjectTransition(oldStatus, status);
+    if (!transitionValidation.valid) {
+      throw new Error(`Invalid project state transition: ${transitionValidation.reason}`);
+    }
+
+    // ENFORCEMENT: Cannot mark as 'done' without passing audit
+    if (status === 'done') {
+      const audit = this.verifier.runCompletionAudit(projectId);
+      if (!audit.pass) {
+        throw new Error(
+          `Cannot mark project as done: audit failed with score ${audit.score}/100. ` +
+            `Reasons: ${audit.reasons.join(', ')}`
+        );
+      }
+    }
 
     db.prepare(`UPDATE projects SET status = ?, updated_at = ? WHERE id = ?`).run(status, now(), projectId);
 
@@ -128,6 +158,22 @@ export class TaskEngine {
   }
 
   logEvidence(projectId: string, title: string, content: string): string {
+    // Validate evidence quality
+    const validation = validateEvidence(title, content);
+    if (!validation.valid) {
+      console.warn(
+        `Evidence quality is low (score: ${validation.score}/100).`,
+        `Issues: ${validation.issues.join(', ')}.`,
+        `Suggestions: ${validation.suggestions.join(', ')}`
+      );
+      // Log as note about low-quality evidence
+      this.logMemory(
+        projectId,
+        'note',
+        `Low-quality evidence detected: "${title}". Score: ${validation.score}/100. Issues: ${validation.issues.join('; ')}`
+      );
+    }
+
     const id = newId('ev');
     db.prepare(`
       INSERT INTO evidence_entries (id, project_id, title, content, created_at)

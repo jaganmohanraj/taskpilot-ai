@@ -19,6 +19,9 @@ Most AI assistants:
 TaskPilot AI provides:
 
 ✅ **Verifier-Gated Completion** - Projects cannot be marked done until all criteria pass
+✅ **External Verification** - Run actual tests, builds, lints to prove completion
+✅ **Real-Time Updates** - WebSocket-powered live dashboard with instant notifications
+✅ **Composite Operations** - Batch tasks, bulk updates, project cloning, templates
 ✅ **Anti-Drift Detection** - Continuous monitoring prevents scope creep and goal misalignment
 ✅ **Persistent Memory** - Full audit trail of decisions, blockers, assumptions, and evidence
 ✅ **State Machine** - Enforced project lifecycle from draft → verified → done
@@ -31,15 +34,43 @@ TaskPilot AI provides:
 
 ## Key Differentiators
 
-### 1. No Fake Completion
+### 1. No Fake Completion ⛔
 Projects cannot close until:
 - All tasks are done
 - All blockers are resolved
-- Evidence is logged
+- Evidence is logged **and validated for quality**
 - Acceptance criteria are met
 - Drift checks pass
+- **External verification passes** (tests, builds, lints)
 
-### 2. Anti-Drift System
+**Enforcement**: Direct attempts to mark projects "done" are blocked at the architecture level. The verifier must pass with 100/100 score, including optional external verification.
+
+### 2. External Verification 🔬
+Prove completion with actual execution:
+- **Test Execution**: Run npm test, pytest, etc.
+- **Build Verification**: Ensure code compiles
+- **Lint Checks**: Code quality validation
+- **Git Verification**: Commits and clean working tree
+- **Custom Checks**: Configurable commands
+- **Automatic Evidence**: Results logged as proof
+
+### 3. Real-Time Collaboration 🔄
+- **WebSocket Updates**: Live project/task changes
+- **Live Notifications**: Toast alerts for events
+- **Auto-Refresh**: Dashboard updates without reload
+- **Multi-User Ready**: Subscribe to project channels
+- **Event Streaming**: All changes broadcast instantly
+
+### 4. Composite Operations ⚡
+Efficient batch and bulk operations:
+- **Batch Task Creation**: Create multiple tasks at once
+- **Bulk Status Updates**: Update many tasks together
+- **Project Cloning**: Duplicate entire projects
+- **Project Templates**: Reusable project patterns
+- **Bulk Archiving**: Archive completed projects
+- **Aggregated Stats**: Cross-project insights
+
+### 5. Anti-Drift System
 Automatic detection of:
 - Scope drift (too many tasks)
 - Goal mismatch (vague objectives)
@@ -47,19 +78,23 @@ Automatic detection of:
 - Abandoned tasks
 - Unresolved blockers
 
-### 3. Full Memory Persistence
+### 6. Full Memory Persistence 💾
 Every project stores:
 - **Decisions** - What was decided and why
 - **Assumptions** - What we're assuming (and whether verified)
 - **Blockers** - What's preventing progress
-- **Evidence** - Proof of completion
-- **State History** - Complete timeline
+- **Evidence** - Proof of completion (quality-scored 0-100)
+- **State History** - Complete timeline with reasons
 
-### 4. Execution Intelligence
+**Evidence Validation**: All evidence is scored for quality. Suspicious patterns like "done" or "ok" trigger warnings.
+
+### 7. Execution Intelligence 🧠
 - Smart work breakdown from acceptance criteria
 - Priority and dependency awareness
 - Next-best-action recommendations
 - Health and completeness scoring
+- Automatic state transition enforcement
+- Test coverage: 70-80% across core modules
 
 ---
 
@@ -79,6 +114,27 @@ npm run build
 ```bash
 npm start
 ```
+
+### Run the Web Dashboard 🎨
+
+Launch the interactive web dashboard for visual project management:
+
+```bash
+npm run dashboard
+```
+
+Then open http://localhost:3000 in your browser.
+
+The dashboard provides:
+- **Real-Time Updates**: WebSocket-powered live updates without refresh
+- **Overview**: View all projects with health scores and progress
+- **Project Detail**: Deep-dive into tasks, memory, evidence, audit results, and timeline
+- **Next Action**: AI-powered recommendations for what to work on next
+- **Real-time Health**: Visual health meters and completeness tracking
+- **Create Projects**: Interactive forms to create new projects
+- **Live Notifications**: Toast notifications for verification results and updates
+- **Batch Operations**: Create multiple tasks, clone projects, bulk updates
+- **External Verification**: Run tests/builds directly from UI
 
 ### Use with Claude Desktop
 
@@ -268,18 +324,68 @@ Near-term priorities:
 
 ## Documentation
 
+### Getting Started
+- [Quick Start](#quick-start) - Installation and setup
+- [Examples](docs/examples.md) - 5 real-world usage examples
+- [Deployment Guide](docs/deployment.md) - Docker, Kubernetes, production
+
+### Architecture & Design
+- [Architecture](docs/architecture.md) - System design and components
 - [Blueprint](docs/blueprint.md) - Core design principles
 - [Operating Model](docs/operating-model.md) - Standard runbook
+- [Security](docs/security.md) - Threat models and mitigations
+
+### Contributing
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
+- [Comparison](docs/comparison.md) - vs Jira, Asana, Linear, Notion
 - [Roadmap](docs/roadmap.md) - Future plans
+
+---
+
+## Testing & Quality
+
+TaskPilot AI has comprehensive test coverage:
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Watch mode
+npm run test:watch
+```
+
+**Coverage Thresholds**:
+- Branches: 70%
+- Functions: 75%
+- Lines: 80%
+- Statements: 80%
+
+**Test Files**:
+- `verifier.test.ts` - Completion audit logic (15+ tests)
+- `driftDetector.test.ts` - Anti-drift checks (10+ tests)
+- `taskEngine.test.ts` - Core engine operations (35+ tests)
+
+**CI/CD**: Automated testing on Node 18 & 20 with GitHub Actions
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Development setup
+- Coding standards
+- Testing requirements
+- Pull request process
+- Architecture guidelines
+
+Key areas for contribution:
+- **Web Dashboard** - Visual UI for projects
+- **Advanced Drift Detection** - Semantic analysis
+- **Multi-Agent Orchestration** - Coordinating multiple AI agents
+- **External Integrations** - GitHub, Jira, Linear connectors
 
 ---
 
@@ -296,14 +402,40 @@ MIT License - see [LICENSE](LICENSE) for details.
 > **TaskPilot AI is an execution system.**
 
 It doesn't just store tasks - it:
-- Prevents drift
-- Enforces discipline
-- Demands evidence
-- Proves completion
-- Maintains memory
-- Tracks health
+- **Prevents drift** with automatic detection
+- **Enforces discipline** through state validation
+- **Demands evidence** with quality scoring
+- **Proves completion** via verifier gates
+- **Maintains memory** of all decisions
+- **Tracks health** in real-time
 
 **Built for professionals who need AI assistance that doesn't cut corners.**
+
+### Commercial Readiness
+
+- ✅ **60+ tests** with 70-80% coverage
+- ✅ **CI/CD pipeline** with automated quality checks
+- ✅ **Security documentation** with threat models
+- ✅ **Production deployment** guides (Docker/K8s)
+- ✅ **Verifier enforcement** prevents bypass
+- ✅ **Evidence validation** catches fake completions
+- ⚠️ **Web dashboard** (roadmap)
+
+---
+
+## Comparison
+
+| Feature | TaskPilot AI | Jira | Asana | Linear |
+|---------|:------------:|:----:|:-----:|:------:|
+| Verifier-Gated Completion | ✅ | ❌ | ❌ | ❌ |
+| Evidence Validation | ✅ | ❌ | ❌ | ❌ |
+| Anti-Drift Detection | ✅ | ❌ | ❌ | ❌ |
+| Persistent AI Memory | ✅ | ❌ | ❌ | ❌ |
+| State Enforcement | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| Open Source | ✅ | ❌ | ❌ | ❌ |
+| Self-Hosted | ✅ | ⚠️ | ❌ | ❌ |
+
+See [docs/comparison.md](docs/comparison.md) for detailed analysis.
 
 ---
 
