@@ -6,7 +6,7 @@ import { TaskEngine } from './taskEngine.js';
 
 initDb();
 const engine = new TaskEngine();
-const server = new McpServer({ name: 'taskpilot-ai', version: '0.3.0' });
+const server = new McpServer({ name: 'taskpilot-ai', version: '0.4.0' });
 
 // Core project management tools
 server.tool(
