@@ -35,12 +35,18 @@ export class DriftDetector {
     // Check for unresolved blockers
     checks.push(...this.checkUnresolvedBlockers(project, memory));
 
-    // Persist drift checks
+    // De-duplicate and persist drift checks
+    const seenKeys = new Set<string>();
+    const uniqueChecks: DriftCheck[] = [];
     for (const check of checks) {
+      const key = `${check.projectId}:${check.checkType}:${check.description}`;
+      if (seenKeys.has(key)) continue;
+      seenKeys.add(key);
+      uniqueChecks.push(check);
       this.saveDriftCheck(check);
     }
 
-    return checks;
+    return uniqueChecks;
   }
 
   private checkScopeDrift(project: Project, tasks: Task[]): DriftCheck[] {
