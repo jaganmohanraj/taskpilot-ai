@@ -262,11 +262,27 @@ describe('CompositeOperations', () => {
 
   describe('bulkArchiveProjects', () => {
     it('should archive multiple completed projects', () => {
-      const project1 = engine.createProject('Project 1', 'Objective', 'Criteria');
-      const project2 = engine.createProject('Project 2', 'Objective', 'Criteria');
+      const project1 = engine.createProject('Project 1', 'Build comprehensive feature with tests', 'All tests pass\nFeature works correctly');
+      const project2 = engine.createProject('Project 2', 'Implement robust authentication system', 'Users can login\nSessions are secure');
 
-      // Complete the projects first
+      // Complete the projects through valid state transitions
+      const task1 = engine.createTask(project1.id, 'Task', 'Details', 100);
+      const task2 = engine.createTask(project2.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task1.id, 'in_progress');
+      engine.updateTaskStatus(task1.id, 'done');
+      engine.updateTaskStatus(task2.id, 'in_progress');
+      engine.updateTaskStatus(task2.id, 'done');
+      engine.logEvidence(project1.id, 'Evidence', 'All 30 tests passed with commit abc123. Deployed successfully with screenshot verification.');
+      engine.logEvidence(project2.id, 'Evidence', 'All 30 tests passed with commit abc123. Deployed successfully with screenshot verification.');
+      engine.updateProjectStatus(project1.id, 'planned');
+      engine.updateProjectStatus(project1.id, 'in_progress');
+      engine.updateProjectStatus(project1.id, 'awaiting_verification');
+      engine.updateProjectStatus(project1.id, 'verified');
       engine.updateProjectStatus(project1.id, 'done', 'Completed');
+      engine.updateProjectStatus(project2.id, 'planned');
+      engine.updateProjectStatus(project2.id, 'in_progress');
+      engine.updateProjectStatus(project2.id, 'awaiting_verification');
+      engine.updateProjectStatus(project2.id, 'verified');
       engine.updateProjectStatus(project2.id, 'done', 'Completed');
 
       const result = composite.bulkArchiveProjects([project1.id, project2.id]);
@@ -281,7 +297,15 @@ describe('CompositeOperations', () => {
     });
 
     it('should skip non-existent projects', () => {
-      const project = engine.createProject('Project', 'Objective', 'Criteria');
+      const project = engine.createProject('Project', 'Build comprehensive feature', 'All tests pass\nFeature works');
+      const task = engine.createTask(project.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
+      engine.updateTaskStatus(task.id, 'done');
+      engine.logEvidence(project.id, 'Evidence', 'All 30 tests passed with commit abc123. Deployed successfully with screenshot.');
+      engine.updateProjectStatus(project.id, 'planned');
+      engine.updateProjectStatus(project.id, 'in_progress');
+      engine.updateProjectStatus(project.id, 'awaiting_verification');
+      engine.updateProjectStatus(project.id, 'verified');
       engine.updateProjectStatus(project.id, 'done', 'Completed');
 
       const result = composite.bulkArchiveProjects([project.id, 'nonexistent-id']);
@@ -304,9 +328,17 @@ describe('CompositeOperations', () => {
     });
 
     it('should handle mixed results', () => {
-      const completed = engine.createProject('Completed', 'Objective', 'Criteria');
+      const completed = engine.createProject('Completed', 'Build comprehensive feature', 'All tests pass\nFeature works');
       const incomplete = engine.createProject('Incomplete', 'Objective', 'Criteria');
 
+      const task = engine.createTask(completed.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
+      engine.updateTaskStatus(task.id, 'done');
+      engine.logEvidence(completed.id, 'Evidence', 'All 30 tests passed with commit abc123. Deployed successfully with screenshot.');
+      engine.updateProjectStatus(completed.id, 'planned');
+      engine.updateProjectStatus(completed.id, 'in_progress');
+      engine.updateProjectStatus(completed.id, 'awaiting_verification');
+      engine.updateProjectStatus(completed.id, 'verified');
       engine.updateProjectStatus(completed.id, 'done', 'Completed');
 
       const result = composite.bulkArchiveProjects([completed.id, incomplete.id, 'nonexistent']);
@@ -323,6 +355,7 @@ describe('CompositeOperations', () => {
 
       engine.createTask(project1.id, 'Task 1', 'Details', 100);
       const task2 = engine.createTask(project1.id, 'Task 2', 'Details', 200);
+      engine.updateTaskStatus(task2.id, 'in_progress');
       engine.updateTaskStatus(task2.id, 'done');
 
       engine.createTask(project2.id, 'Task 3', 'Details', 100);
@@ -357,10 +390,18 @@ describe('CompositeOperations', () => {
     });
 
     it('should include status breakdown', () => {
-      const project1 = engine.createProject('Project 1', 'Objective', 'Criteria');
-      const project2 = engine.createProject('Project 2', 'Objective', 'Criteria');
+      const project1 = engine.createProject('Project 1', 'Build comprehensive feature', 'All tests pass\nFeature works');
+      const project2 = engine.createProject('Project 2', 'Build comprehensive feature', 'All tests pass\nFeature works');
       const project3 = engine.createProject('Project 3', 'Objective', 'Criteria');
 
+      const task = engine.createTask(project2.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
+      engine.updateTaskStatus(task.id, 'done');
+      engine.logEvidence(project2.id, 'Evidence', 'All 30 tests passed with commit abc123. Deployed successfully with screenshot.');
+      engine.updateProjectStatus(project2.id, 'planned');
+      engine.updateProjectStatus(project2.id, 'in_progress');
+      engine.updateProjectStatus(project2.id, 'awaiting_verification');
+      engine.updateProjectStatus(project2.id, 'verified');
       engine.updateProjectStatus(project2.id, 'done', 'Completed');
 
       const stats = composite.getAggregatedStats([project1.id, project2.id, project3.id]);
