@@ -70,8 +70,9 @@ describe('Verifier', () => {
     it('should pass audit when all criteria met', () => {
       const project = engine.createProject('Test', 'Objective', 'Criteria 1');
       const task = engine.createTask(project.id, 'Task 1', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
-      engine.logEvidence(project.id, 'Proof', 'Screenshot of completed feature');
+      engine.logEvidence(project.id, 'Deployment Proof', 'Successfully deployed commit abc123 with screenshot showing 15 tests passed and production monitoring at 99% uptime.');
 
       const result = verifier.runCompletionAudit(project.id);
       expect(result.pass).toBe(true);
@@ -99,8 +100,9 @@ describe('Verifier', () => {
     it('should return empty array when project complete', () => {
       const project = engine.createProject('Test', 'Objective', 'Criteria');
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
-      engine.logEvidence(project.id, 'Proof', 'Done');
+      engine.logEvidence(project.id, 'Test Proof', 'All 30 integration tests passed successfully with commit SHA def456. Deployed to staging with 100% health check pass rate.');
 
       const reasons = verifier.whyNotDone(project.id);
       expect(reasons).toHaveLength(0);
@@ -131,8 +133,9 @@ describe('Verifier', () => {
     it('should return true when audit passes', () => {
       const project = engine.createProject('Test', 'Objective', 'Criteria');
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
-      engine.logEvidence(project.id, 'Proof', 'Done');
+      engine.logEvidence(project.id, 'Performance Metrics', 'Benchmark results show 99th percentile latency under 200ms with 50 concurrent users. Load test passed with commit ghi789. All acceptance criteria verified.');
 
       const result = verifier.canClose(project.id);
       expect(result.canClose).toBe(true);

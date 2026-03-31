@@ -79,6 +79,7 @@ describe('TaskEngine', () => {
     it('should set completedAt when task marked done', () => {
       const project = engine.createProject('Test', 'Objective', 'Criteria');
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
 
       const updated = engine.getTask(task.id);
@@ -90,6 +91,7 @@ describe('TaskEngine', () => {
       const initialHealth = project.healthScore || 0;
 
       const task = engine.createTask(project.id, 'Task', 'Details', 100);
+      engine.updateTaskStatus(task.id, 'in_progress');
       engine.updateTaskStatus(task.id, 'done');
 
       const updated = engine.getProject(project.id);
@@ -162,10 +164,14 @@ describe('TaskEngine', () => {
     });
 
     it('should suggest closure when complete', () => {
-      const project = engine.createProject('Test', 'Objective', 'Criteria');
-      const task = engine.createTask(project.id, 'Task', 'Details', 100);
-      engine.updateTaskStatus(task.id, 'done');
-      engine.logEvidence(project.id, 'Proof', 'Done');
+      const project = engine.createProject('Test', 'Objective', 'User can login\nAll tests pass\nCode is deployed');
+      const tasks = engine.generateWorkBreakdown(project.id);
+      // Mark all tasks as done
+      tasks.forEach(task => {
+        engine.updateTaskStatus(task.id, 'in_progress');
+        engine.updateTaskStatus(task.id, 'done');
+      });
+      engine.logEvidence(project.id, 'Test Results Proof', 'All 25 integration tests passed successfully with 100% code coverage. Screenshot attached showing green checkmarks across all test suites.');
 
       const action = engine.suggestNextBestAction(project.id);
       expect(action.action).toContain('Close project');
@@ -174,10 +180,14 @@ describe('TaskEngine', () => {
 
   describe('closeProjectIfVerified', () => {
     it('should close project when audit passes', () => {
-      const project = engine.createProject('Test', 'Objective', 'Criteria');
-      const task = engine.createTask(project.id, 'Task', 'Details', 100);
-      engine.updateTaskStatus(task.id, 'done');
-      engine.logEvidence(project.id, 'Proof', 'Done');
+      const project = engine.createProject('Test', 'Objective', 'User can login\nAll tests pass\nCode is deployed');
+      const tasks = engine.generateWorkBreakdown(project.id);
+      // Mark all tasks as done
+      tasks.forEach(task => {
+        engine.updateTaskStatus(task.id, 'in_progress');
+        engine.updateTaskStatus(task.id, 'done');
+      });
+      engine.logEvidence(project.id, 'Deployment Proof', 'Successfully deployed to production with commit SHA abc123. All 50 integration tests passed. Monitoring dashboard shows 99.9% uptime over 24 hours.');
 
       const result = engine.closeProjectIfVerified(project.id);
       expect(result.closed).toBe(true);

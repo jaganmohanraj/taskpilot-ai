@@ -86,6 +86,23 @@ npm run build
 npm start
 ```
 
+### Run the Web Dashboard 🎨
+
+Launch the interactive web dashboard for visual project management:
+
+```bash
+npm run dashboard
+```
+
+Then open http://localhost:3000 in your browser.
+
+The dashboard provides:
+- **Overview**: View all projects with health scores and progress
+- **Project Detail**: Deep-dive into tasks, memory, evidence, audit results, and timeline
+- **Next Action**: AI-powered recommendations for what to work on next
+- **Real-time Health**: Visual health meters and completeness tracking
+- **Create Projects**: Interactive forms to create new projects
+
 ### Use with Claude Desktop
 
 Add to your `claude_desktop_config.json`:

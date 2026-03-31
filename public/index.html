@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskPilot AI - Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🎯</span>
+                    TaskPilot AI
+                </h1>
+                <div class="header-actions">
+                    <button id="newProjectBtn" class="btn btn-primary">+ New Project</button>
+                    <button id="refreshBtn" class="btn btn-secondary">↻ Refresh</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav">
+                    <a href="#" class="nav-item active" data-view="overview">
+                        <span class="nav-icon">📊</span>
+                        Overview
+                    </a>
+                    <a href="#" class="nav-item" data-view="projects">
+                        <span class="nav-icon">📁</span>
+                        All Projects
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Overview View (Default) -->
+                <div id="overviewView" class="view active">
+                    <div class="view-header">
+                        <h2>Dashboard Overview</h2>
+                        <p class="subtitle">Monitor all projects and their health status</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Projects</div>
+                            <div class="stat-value" id="totalProjects">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">In Progress</div>
+                            <div class="stat-value" id="inProgressProjects">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Completed</div>
+                            <div class="stat-value" id="completedProjects">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Avg Health</div>
+                            <div class="stat-value" id="avgHealth">0%</div>
+                        </div>
+                    </div>
+
+                    <div id="projectsList" class="projects-list"></div>
+                </div>
+
+                <!-- Project Detail View -->
+                <div id="projectDetailView" class="view">
+                    <div class="view-header">
+                        <button id="backBtn" class="btn btn-text">← Back</button>
+                        <div>
+                            <h2 id="projectTitle">Project Title</h2>
+                            <p class="subtitle" id="projectObjective"></p>
+                        </div>
+                    </div>
+
+                    <div class="project-detail">
+                        <!-- Health Indicators -->
+                        <div class="health-section">
+                            <div class="health-card">
+                                <div class="health-label">Health Score</div>
+                                <div class="health-meter">
+                                    <div id="healthMeter" class="meter-fill"></div>
+                                </div>
+                                <div id="healthScore" class="health-value">0%</div>
+                            </div>
+                            <div class="health-card">
+                                <div class="health-label">Completeness</div>
+                                <div class="health-meter">
+                                    <div id="completenessMeter" class="meter-fill"></div>
+                                </div>
+                                <div id="completenessScore" class="health-value">0%</div>
+                            </div>
+                            <div class="health-card">
+                                <div class="health-label">Status</div>
+                                <div id="projectStatus" class="status-badge">draft</div>
+                            </div>
+                        </div>
+
+                        <!-- Tabs -->
+                        <div class="tabs">
+                            <button class="tab active" data-tab="tasks">Tasks</button>
+                            <button class="tab" data-tab="memory">Memory</button>
+                            <button class="tab" data-tab="evidence">Evidence</button>
+                            <button class="tab" data-tab="audit">Audit</button>
+                            <button class="tab" data-tab="timeline">Timeline</button>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Tasks Tab -->
+                            <div id="tasksTab" class="tab-panel active">
+                                <div id="tasksList"></div>
+                            </div>
+
+                            <!-- Memory Tab -->
+                            <div id="memoryTab" class="tab-panel">
+                                <div id="memoryList"></div>
+                            </div>
+
+                            <!-- Evidence Tab -->
+                            <div id="evidenceTab" class="tab-panel">
+                                <div id="evidenceList"></div>
+                            </div>
+
+                            <!-- Audit Tab -->
+                            <div id="auditTab" class="tab-panel">
+                                <div id="auditResults"></div>
+                            </div>
+
+                            <!-- Timeline Tab -->
+                            <div id="timelineTab" class="tab-panel">
+                                <div id="timelineList"></div>
+                            </div>
+                        </div>
+
+                        <!-- Next Action -->
+                        <div id="nextActionCard" class="next-action-card"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Project Modal -->
+    <div id="newProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Project</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="newProjectTitle" class="input" placeholder="Project title...">
+                </div>
+                <div class="form-group">
+                    <label>Objective</label>
+                    <textarea id="newProjectObjective" class="input" rows="3" placeholder="Clear, measurable objective..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Acceptance Criteria</label>
+                    <textarea id="newProjectCriteria" class="input" rows="5" placeholder="One criterion per line..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelProjectBtn" class="btn btn-secondary">Cancel</button>
+                <button id="createProjectBtn" class="btn btn-primary">Create Project</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
