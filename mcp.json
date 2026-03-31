@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "taskpilot-ai": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "."
+    }
+  }
+}
