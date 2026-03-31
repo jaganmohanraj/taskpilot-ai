@@ -11,6 +11,7 @@
     "check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist artifacts/*.db",
     "format": "prettier --write 'src/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts'",
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
