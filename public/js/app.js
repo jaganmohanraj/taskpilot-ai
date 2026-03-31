@@ -9,13 +9,90 @@ class TaskPilotApp {
     this.currentProjectId = null;
     this.currentTab = 'tasks';
     this.projects = [];
+    this.socket = null;
     this.init();
   }
 
   async init() {
+    this.setupWebSocket();
     this.setupEventListeners();
     await this.loadProjects();
     this.renderOverview();
+  }
+
+  setupWebSocket() {
+    // Connect to WebSocket server
+    this.socket = io();
+
+    this.socket.on('connect', () => {
+      console.log('WebSocket connected');
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
+    });
+
+    // Real-time project updates
+    this.socket.on('project:created', (project) => {
+      this.projects.push(project);
+      if (this.currentView === 'overview') {
+        this.renderOverview();
+      }
+    });
+
+    this.socket.on('project:updated', (project) => {
+      const index = this.projects.findIndex(p => p.id === project.id);
+      if (index !== -1) {
+        this.projects[index] = project;
+      }
+      if (this.currentView === 'overview') {
+        this.renderOverview();
+      }
+      if (this.currentProjectId === project.id) {
+        this.openProject(project.id);
+      }
+    });
+
+    this.socket.on('project:status-changed', ({ projectId, status }) => {
+      if (this.currentView === 'overview') {
+        this.renderOverview();
+      }
+    });
+
+    // Real-time task updates
+    this.socket.on('task:created', (task) => {
+      if (this.currentProjectId === task.projectId && this.currentTab === 'tasks') {
+        this.openProject(this.currentProjectId);
+      }
+    });
+
+    this.socket.on('task:updated', (task) => {
+      if (this.currentProjectId === task.projectId && this.currentTab === 'tasks') {
+        this.openProject(this.currentProjectId);
+      }
+    });
+
+    // Real-time memory and evidence updates
+    this.socket.on('memory:added', () => {
+      if (this.currentTab === 'memory') {
+        this.openProject(this.currentProjectId);
+      }
+    });
+
+    this.socket.on('evidence:added', () => {
+      if (this.currentTab === 'evidence') {
+        this.openProject(this.currentProjectId);
+      }
+    });
+
+    // Verification completed
+    this.socket.on('verification:completed', (result) => {
+      this.showNotification(
+        result.passed ? 'Verification Passed' : 'Verification Failed',
+        result.summary,
+        result.passed ? 'success' : 'error'
+      );
+    });
   }
 
   setupEventListeners() {
@@ -166,6 +243,11 @@ class TaskPilotApp {
   async openProject(projectId) {
     this.currentProjectId = projectId;
     this.switchView('project');
+
+    // Subscribe to WebSocket updates for this project
+    if (this.socket) {
+      this.socket.emit('subscribe:project', projectId);
+    }
 
     // Load project data
     const [project, tasks, memory, evidence, timeline, audit, nextAction] = await Promise.all([
@@ -463,7 +545,43 @@ class TaskPilotApp {
   }
 
   showError(message) {
-    alert(message);
+    this.showNotification('Error', message, 'error');
+  }
+
+  showNotification(title, message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let container = document.getElementById('notificationContainer');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'notificationContainer';
+      container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; max-width: 400px;';
+      document.body.appendChild(container);
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+      background: white;
+      border-left: 4px solid ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)'};
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+      animation: slideInRight 0.3s ease-out;
+    `;
+
+    notification.innerHTML = `
+      <div style="font-weight: 600; margin-bottom: 0.25rem;">${this.escapeHtml(title)}</div>
+      <div style="font-size: 0.875rem; color: var(--gray-700);">${this.escapeHtml(message)}</div>
+    `;
+
+    container.appendChild(notification);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => notification.remove(), 300);
+    }, 5000);
   }
 }
 
