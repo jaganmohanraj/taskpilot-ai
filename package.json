@@ -6,9 +6,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/server.js",
-    "start:mcp": "node dist/index.js",
+    "dev": "tsx src/mcp.ts",
+    "start": "node dist/index.js",
+    "start:mcp": "node dist/mcp.js",
     "start:dashboard": "tsx src/server.ts",
     "check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist artifacts/*.db",
@@ -74,7 +74,8 @@
     "collectCoverageFrom": [
       "src/**/*.ts",
       "!src/**/*.test.ts",
-      "!src/index.ts"
+      "!src/index.ts",
+      "!src/mcp.ts"
     ],
     "coverageThreshold": {
       "global": {
