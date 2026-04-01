@@ -93,8 +93,8 @@ TaskPilot AI can be deployed to Render.com using the included `render.yaml` conf
 
 2. **Configuration**:
    The `render.yaml` file includes:
-   - Build command: `npm install && npm run build`
-   - Start command: `npm start` (runs `dist/server.js`)
+   - Build command: `npm install --include=dev && npm run build && npm prune --omit=dev`
+   - Start command: `node dist/server.js` (runs the web dashboard)
    - Persistent disk for SQLite database at `/opt/render/project/src/artifacts`
    - Environment variables for production
 
@@ -107,8 +107,8 @@ TaskPilot AI can be deployed to Render.com using the included `render.yaml` conf
 
 Alternatively, create a new Web Service manually:
 
-- **Build Command**: `npm install && npm run build`
-- **Start Command**: `npm start`
+- **Build Command**: `npm install --include=dev && npm run build && npm prune --omit=dev`
+- **Start Command**: `node dist/server.js`
 - **Environment Variables**:
   - `NODE_ENV=production`
   - `DATABASE_PATH=./artifacts/taskpilot.db`
