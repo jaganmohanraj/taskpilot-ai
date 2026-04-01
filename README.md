@@ -112,7 +112,7 @@ npm run build
 ### Run the MCP Server
 
 ```bash
-npm start
+npm run start:mcp
 ```
 
 ### Run the Web Dashboard 🎨
@@ -120,7 +120,7 @@ npm start
 Launch the interactive web dashboard for visual project management:
 
 ```bash
-npm run dashboard
+npm start
 ```
 
 Then open http://localhost:3000 in your browser.

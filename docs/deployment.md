@@ -11,7 +11,18 @@ git clone https://github.com/jaganmohanraj/taskpilot-ai.git
 cd taskpilot-ai
 npm install
 npm run build
+```
+
+To start the **web dashboard** (default, also used by Render):
+
+```bash
 npm start
+```
+
+To start the **MCP server** for use with Claude Desktop or other MCP clients:
+
+```bash
+npm run start:mcp
 ```
 
 Database will be created at `./artifacts/taskpilot.db`.
@@ -19,7 +30,8 @@ Database will be created at `./artifacts/taskpilot.db`.
 ### Development Mode
 
 ```bash
-npm run dev
+npm run dev              # MCP server with hot-reloading
+npm run start:dashboard  # Web dashboard with hot-reloading (tsx)
 ```
 
 Uses `tsx` for hot-reloading during development.
@@ -85,7 +97,7 @@ RUN useradd -m -u 1001 taskpilot && \
 
 USER taskpilot
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/server.js"]
 ```
 
 Build and run:
@@ -263,6 +275,8 @@ npm start > taskpilot.log 2>&1
 # With log rotation
 npm start | rotatelogs -n 10 taskpilot.log 100M
 ```
+
+> **Note**: `npm start` runs the web dashboard (`dist/server.js`). To log the MCP server, replace `npm start` with `npm run start:mcp`.
 
 ## Security Hardening
 
