@@ -74,6 +74,52 @@ In Claude Desktop, check that TaskPilot AI tools appear in the MCP tools list.
 
 ## Production Deployment
 
+### Render.com Deployment
+
+TaskPilot AI can be deployed to Render.com using the included `render.yaml` configuration.
+
+#### Prerequisites
+
+- GitHub repository connected to Render
+- Render account (free tier works)
+
+#### Deployment Steps
+
+1. **Connect your repository to Render**:
+   - Go to [Render Dashboard](https://dashboard.render.com/)
+   - Click "New +" and select "Blueprint"
+   - Connect your GitHub repository
+   - Render will automatically detect the `render.yaml` file
+
+2. **Configuration**:
+   The `render.yaml` file includes:
+   - Build command: `npm install && npm run build`
+   - Start command: `npm start` (runs `dist/server.js`)
+   - Persistent disk for SQLite database at `/opt/render/project/src/artifacts`
+   - Environment variables for production
+
+3. **Deploy**:
+   - Click "Apply" to deploy
+   - Render will build and start your application
+   - Access your dashboard at the provided URL
+
+#### Manual Deployment
+
+Alternatively, create a new Web Service manually:
+
+- **Build Command**: `npm install && npm run build`
+- **Start Command**: `npm start`
+- **Environment Variables**:
+  - `NODE_ENV=production`
+  - `DATABASE_PATH=./artifacts/taskpilot.db`
+- **Disk**: Add a persistent disk mounted at `/opt/render/project/src/artifacts` (1GB)
+
+#### Post-Deployment
+
+- The web dashboard will be available at your Render URL
+- Database persists across deployments in the mounted disk
+- Auto-deploys on git push to main branch
+
 ### Docker Deployment
 
 Create `Dockerfile`:

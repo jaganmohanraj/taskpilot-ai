@@ -327,7 +327,7 @@ Near-term priorities:
 ### Getting Started
 - [Quick Start](#quick-start) - Installation and setup
 - [Examples](docs/examples.md) - 5 real-world usage examples
-- [Deployment Guide](docs/deployment.md) - Docker, Kubernetes, production
+- [Deployment Guide](docs/deployment.md) - Render.com, Docker, Kubernetes, production
 
 ### Architecture & Design
 - [Architecture](docs/architecture.md) - System design and components
