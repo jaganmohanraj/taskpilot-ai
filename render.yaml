@@ -2,7 +2,7 @@ services:
   - type: web
     name: taskpilot-ai
     runtime: node
-    buildCommand: npm install --include=dev && npm run build
+    buildCommand: npm install --include=dev && npm run build && npm prune --omit=dev
     startCommand: node dist/server.js
     envVars:
       - key: NODE_ENV
