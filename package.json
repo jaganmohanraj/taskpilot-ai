@@ -6,9 +6,10 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsx src/index.ts",
+    "postinstall": "tsc -p tsconfig.json",
+    "dev": "tsx src/mcp.ts",
     "start": "node dist/server.js",
-    "start:mcp": "node dist/index.js",
+    "start:mcp": "node dist/mcp.js",
     "start:dashboard": "tsx src/server.ts",
     "check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist artifacts/*.db",
@@ -34,22 +35,22 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.19.15",
     "better-sqlite3": "^11.7.2",
     "express": "^5.2.1",
     "socket.io": "^4.8.3",
+    "typescript": "^5.8.2",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@types/better-sqlite3": "^7.6.12",
-    "@types/express": "^5.0.6",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.19.15",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
     "ts-jest": "^29.4.6",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "tsx": "^4.19.3"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
@@ -74,7 +75,8 @@
     "collectCoverageFrom": [
       "src/**/*.ts",
       "!src/**/*.test.ts",
-      "!src/index.ts"
+      "!src/index.ts",
+      "!src/mcp.ts"
     ],
     "coverageThreshold": {
       "global": {
