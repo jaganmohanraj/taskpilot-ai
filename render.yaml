@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: taskpilot-ai
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: ./artifacts/taskpilot.db
+    disk:
+      name: taskpilot-data
+      mountPath: /opt/render/project/src/artifacts
+      sizeGB: 1
