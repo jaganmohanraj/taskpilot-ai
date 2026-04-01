@@ -7,8 +7,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "dashboard": "tsx src/server.ts",
+    "start": "node dist/server.js",
+    "start:mcp": "node dist/index.js",
+    "start:dashboard": "tsx src/server.ts",
     "check": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist artifacts/*.db",
     "format": "prettier --write 'src/**/*.ts'",
